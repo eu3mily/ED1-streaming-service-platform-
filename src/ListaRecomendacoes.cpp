@@ -1,4 +1,4 @@
-#include "../include (arquivos header)/ListaRecomendacoes.h"
+#include "ListaRecomendacoes.h"
 #include <iostream>
 
 ListaRecomendacoes::ListaRecomendacoes() : inicio(nullptr), tamanho(0) {}

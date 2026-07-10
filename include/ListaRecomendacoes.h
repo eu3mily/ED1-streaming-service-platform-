@@ -3,7 +3,7 @@
 
 #include "NoLista.h"
 
-class ListaRecomendacoes {
+class ListaRecomendacoes { // é uma lista simples
 private:
     NoSimples* inicio;
     int tamanho;
@@ -12,7 +12,8 @@ public:
     ListaRecomendacoes();
     ~ListaRecomendacoes();
     
-    void inserirOrdenado(Conteudo* c);  // Por nome alfabético
+        //metodos adicionais
+    void inserirOrdenado(Conteudo* c);  // por ordem alfabetica
     void imprimirLista() const;
     NoSimples* getInicio() const;
     int getTamanho() const;

@@ -1,8 +1,8 @@
-#include "../include (arquivos header)/Conteudo.h"
+#include "Conteudo.h"
 #include <iostream>
 
-Conteudo::Conteudo() 
-    : nome(""), tipo(""), genero(""), anoLancamento(0), numVisualizacoes(0) {}
+Conteudo::Conteudo() // vai ser inicializado no core como catalogo geral mesmo
+    : nome(""), tipo(""), genero(""), anoLancamento(), numVisualizacoes() {}
 
 Conteudo::Conteudo(string n, string t, string g, int ano, int viz)
     : nome(n), tipo(t), genero(g), anoLancamento(ano), numVisualizacoes(viz) {}
