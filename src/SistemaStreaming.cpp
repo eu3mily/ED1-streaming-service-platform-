@@ -126,8 +126,22 @@ void SistemaStreaming::executarFluxoRecomendacao() {
     cout << "\n AGORA VAMOS ENCONTRAR O CONTEÚDO PERFEITO PARA VOCÊ!\n";
     cout << "Responda as perguntas abaixo:\n" << endl;
     
-    arvoreDecisao->navegar();
+    // Captura qual nó folha o usuário atingiu
+    NoArvore* folhaAlcancada = arvoreDecisao->navegar();
     totalRecomendacoes++;
+    
+    // Registra a recomendação para as estatísticas globais
+    if (folhaAlcancada != nullptr && folhaAlcancada->listaFolha != nullptr) {
+        NoSimples* primeiroNo = folhaAlcancada->listaFolha->getInicio();
+        if (primeiroNo != nullptr) {
+            // Analisa as propriedades do primeiro item da lista para pontuar a categoria
+            string tipoRec = primeiroNo->conteudo->getTipo();
+            string generoRec = primeiroNo->conteudo->getGenero();
+            
+            contagemTiposRecomendados[tipoRec]++;
+            contagemGenerosRecomendados[generoRec]++;
+        }
+    }
     
     cout << "\nDeseja assistir a um desses conteúdos? (Digite o nome ou apenas 'nao'): ";
     string titulo;
@@ -162,12 +176,90 @@ Conteudo* SistemaStreaming::encontrarConteudo(const string& titulo) const {
  
 void SistemaStreaming::exibirEstatisticas() const {
     cout << "\n" << string(60, '=') << endl;
-    cout << "   ESTATÍSTICAS DO SISTEMA" << endl;
+    cout << "   📊 ESTATÍSTICAS DETALHADAS DO SISTEMA 📊" << endl;
     cout << string(60, '=') << endl;
     
     cout << "Total de recomendações realizadas: " << totalRecomendacoes << endl;
     cout << "Total de visualizações: " << totalVisualizacoes << endl;
     cout << "Total de títulos no catálogo: " << catalogoGeral.size() << endl;
+    cout << string(60, '-') << endl;
+
+    // 1. Calcular Tipo Mais e Menos Recomendado
+    string tipoMaisRec = "Nenhum", tipoMenosRec = "Nenhum";
+    int maxTipo = -1, minTipo = 1e9;
+    for (auto const& par : contagemTiposRecomendados) {
+        if (par.second > maxTipo) { maxTipo = par.second; tipoMaisRec = par.first; }
+        if (par.second < minTipo) { minTipo = par.second; tipoMenosRec = par.first; }
+    }
+    if (contagemTiposRecomendados.empty()) minTipo = 0;
+
+    // 2. Calcular Gênero Mais e Menos Recomendado
+    string generoMaisRec = "Nenhum", generoMenosRec = "Nenhum";
+    int maxGen = -1, minGen = 1e9;
+    for (auto const& par : contagemGenerosRecomendados) {
+        if (par.second > maxGen) { maxGen = par.second; generoMaisRec = par.first; }
+        if (par.second < minGen) { minGen = par.second; generoMenosRec = par.first; }
+    }
+    if (contagemGenerosRecomendados.empty()) minGen = 0;
+
+    cout << "Tipo de conteúdo MAIS recomendado: " << tipoMaisRec << " (" << (maxTipo == -1 ? 0 : maxTipo) << "x)" << endl;
+    cout << "Gênero MAIS recomendado:           " << generoMaisRec << " (" << (maxGen == -1 ? 0 : maxGen) << "x)" << endl;
+    cout << "Tipo de conteúdo MENOS recomendado: " << (minTipo == 1e9 || minTipo == 0 ? "Nenhum" : tipoMenosRec) << endl;
+    cout << "Gênero MENOS recomendado:           " << (minGen == 1e9 || minGen == 0 ? "Nenhum" : generoMenosRec) << endl;
+    cout << string(60, '-') << endl;
+
+    // 3. Título Mais Assistido por Tipo
+    cout << "🎬 Título mais assistido por TIPO:" << endl;
+    vector<string> tiposConhecidos = {"Filme", "Serie", "Documentario", "Anime"};
+    for (const string& t : tiposConhecidos) {
+        Conteudo* maisVisto = nullptr;
+        for (Conteudo* c : catalogoGeral) {
+            if (c->getTipo() == t) {
+                if (maisVisto == nullptr || c->getNumVisualizacoes() > maisVisto->getNumVisualizacoes()) {
+                    maisVisto = c;
+                }
+            }
+        }
+        if (maisVisto != nullptr && maisVisto->getNumVisualizacoes() > 0) {
+            cout << "  • " << t << ": " << maisVisto->getNome() << " (" << maisVisto->getNumVisualizacoes() << " views)" << endl;
+        } else {
+            cout << "  • " << t << ": Nenhum assistido ainda" << endl;
+        }
+    }
+    cout << string(60, '-') << endl;
+
+    // 4. Título Mais Assistido por Gênero
+    cout << "🏷️ Título mais assistido por GÊNERO:" << endl;
+    vector<string> generosConhecidos = {"Acao", "Comedia", "Drama", "Terror", "Ficcao"};
+    for (const string& g : generosConhecidos) {
+        Conteudo* maisVisto = nullptr;
+        for (Conteudo* c : catalogoGeral) {
+            if (c->getGenero() == g) {
+                if (maisVisto == nullptr || c->getNumVisualizacoes() > maisVisto->getNumVisualizacoes()) {
+                    maisVisto = c;
+                }
+            }
+        }
+        if (maisVisto != nullptr && maisVisto->getNumVisualizacoes() > 0) {
+            cout << "  • " << g << ": " << maisVisto->getNome() << " (" << maisVisto->getNumVisualizacoes() << " views)" << endl;
+        } else {
+            cout << "  • " << g << ": Nenhum assistido ainda" << endl;
+        }
+    }
+    cout << string(60, '-') << endl;
+
+    // 5. Títulos Nunca Selecionados
+    cout << "💤 Títulos NUNCA selecionados (0 visualizações):" << endl;
+    bool nenhumNulo = true;
+    for (Conteudo* c : catalogoGeral) {
+        if (c->getNumVisualizacoes() == 0) {
+            cout << "  • " << c->getNome() << " [" << c->getTipo() << "]" << endl;
+            nenhumNulo = false;
+        }
+    }
+    if (nenhumNulo) {
+        cout << "  • Todos os conteúdos do catálogo já foram assistidos ao menos uma vez!" << endl;
+    }
     cout << string(60, '=') << "\n" << endl;
 }
  

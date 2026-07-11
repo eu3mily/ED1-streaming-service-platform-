@@ -4,6 +4,7 @@
 #include "ArvoreDecisao.h"
 #include "ListaHistorico.h"
 #include <vector>
+#include <map>
 
 class SistemaStreaming {
 private:
@@ -13,6 +14,9 @@ private:
     int totalRecomendacoes;
     int totalVisualizacoes;
 
+    std::map<string, int> contagemTiposRecomendados;
+    std::map<string, int> contagemGenerosRecomendados;
+    
 public:
     SistemaStreaming();
     ~SistemaStreaming();

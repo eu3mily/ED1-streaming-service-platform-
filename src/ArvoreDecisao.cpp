@@ -95,10 +95,10 @@ void ArvoreDecisao::criarArvoreEstatica() {
     raiz->direita->direita->direita->direita->listaFolha = new ListaRecomendacoes();
 }
  
-void ArvoreDecisao::navegar() {
+NoArvore* ArvoreDecisao::navegar() {
     if (raiz == nullptr) {
         cout << "Árvore não inicializada!!" << endl;
-        return;
+        return nullptr;
     }
     
     NoArvore* atual = raiz;
@@ -116,14 +116,14 @@ void ArvoreDecisao::navegar() {
                 atual = atual->esquerda;
             } else { // se nao tiver ramo para esquerda
                 cout << "Caminho inválido!" << endl;
-                return;
+                return nullptr;
             }
         } else if (opcao == 2) { // se nao, vai pra direita
             if (atual->direita != nullptr) {
                 atual = atual->direita;
             } else { // se nao tiver ramo pra direita
                 cout << "Caminho inválido!" << endl;
-                return;
+                return nullptr;
             }
         } else { // se nao for nenhum dos dois
             cout << "Opção inválida! Digite apenas 1 ou 2." << endl;
@@ -136,6 +136,8 @@ void ArvoreDecisao::navegar() {
     } else {
         cout << "Sem recomendações disponíveis para esse caminho. :/" << endl;
     }
+
+    return atual;
 }
  
 NoArvore* ArvoreDecisao::getRaiz() const {

@@ -13,7 +13,7 @@ public:
     ~ArvoreDecisao();
     
     void criarArvoreEstatica();   // cria árvore com 6 níveis (no minimo)
-    void navegar();               // percorre árvore interativamente
+    NoArvore* navegar();               // percorre árvore interativamente
     void popularArvore(const std::vector<Conteudo*>& catalogo);
     NoArvore* getRaiz() const;
     
