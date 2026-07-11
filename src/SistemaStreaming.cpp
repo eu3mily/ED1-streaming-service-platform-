@@ -79,26 +79,68 @@ void SistemaStreaming::menuPrincipal() {
  
 void SistemaStreaming::cadastrarConteudo() {
     string nome, tipo, genero;
-    int ano;
+    int ano = 0;
     
     cout << "\n=== CADASTRAR NOVO CONTEÚDO ===" << endl;
     cout << "Nome do título: ";
     getline(cin, nome);
     
-    cout << "Tipo (Filme/Serie/Documentario/Anime/Outro...): ";
-    getline(cin, tipo);
+    // --- SELEÇÃO DE TIPO POR ÍNDICE ---
+    int opTipo = 0;
+    while (opTipo < 1 || opTipo > 4) {
+        cout << "\n--- Selecione o Tipo ---" << endl;
+        cout << "[1] Filme | [2] Serie | [3] Documentario | [4] Anime" << endl;
+        cout << "Opção: ";
+        if (!(cin >> opTipo)) { // Se o usuário digitar letra, isso dá falso
+            cin.clear(); 
+            cin.ignore(10000, '\n'); 
+        }
+        if (opTipo == 1) tipo = "Filme";
+        else if (opTipo == 2) tipo = "Serie";
+        else if (opTipo == 3) tipo = "Documentario";
+        else if (opTipo == 4) tipo = "Anime";
+        else cout << "❌ Opção inválida! Digite um número de 1 a 4." << endl;
+    }
     
-    cout << "Gênero (Acao/Comedia/Drama/Terror/Ficcao/Outro..): ";
-    getline(cin, genero);
+    // --- SELEÇÃO DE GÊNERO POR ÍNDICE ---
+    int opGenero = 0;
+    while (opGenero < 1 || opGenero > 8) {
+        cout << "\n--- Selecione o Gênero ---" << endl;
+        cout << "[1] Acao | [2] Comedia | [3] Drama | [4] Terror" << endl;
+        cout << "[5] Ficcao | [6] Suspense | [7] Natureza | [8] Tecnologia" << endl;
+        cout << "Opção: ";
+        if (!(cin >> opGenero)) {
+            cin.clear(); 
+            cin.ignore(10000, '\n'); 
+        }
+        if (opGenero == 1) genero = "Acao";
+        else if (opGenero == 2) genero = "Comedia";
+        else if (opGenero == 3) genero = "Drama";
+        else if (opGenero == 4) genero = "Terror";
+        else if (opGenero == 5) genero = "Ficcao";
+        else if (opGenero == 6) genero = "Suspense";
+        else if (opGenero == 7) genero = "Natureza";
+        else if (opGenero == 8) genero = "Tecnologia";
+        else cout << "❌ Opção inválida! Digite um número de 1 a 8." << endl;
+    }
     
-    cout << "Ano de lançamento: ";
-    cin >> ano;
-    cin.ignore();
+    // --- CORREÇÃO DO LOOP INFINITO NO ANO ---
+    while (true) {
+        cout << "\nAno de lançamento: ";
+        if (cin >> ano) {
+            cin.ignore(); // Limpa o buffer do Enter e sai do loop
+            break; 
+        } else {
+            cout << "❌ Erro: Por favor, digite um NÚMERO inteiro válido." << endl;
+            cin.clear(); // Limpa a falha do cin
+            cin.ignore(10000, '\n'); // Descarta o texto digitado errado
+        }
+    }
     
     Conteudo* novoConteudo = new Conteudo(nome, tipo, genero, ano);
     catalogoGeral.push_back(novoConteudo);
     
-    cout << "OBAA! Conteúdo cadastrado com sucesso!" << endl;
+    cout << "\nOBAA! Conteúdo cadastrado com sucesso!" << endl;
 }
  
 void SistemaStreaming::listarConteudos() const {
@@ -143,21 +185,41 @@ void SistemaStreaming::executarFluxoRecomendacao() {
     if (folhaAlcancada != nullptr && folhaAlcancada->listaFolha != nullptr) {
         NoSimples* primeiroNo = folhaAlcancada->listaFolha->getInicio();
         if (primeiroNo != nullptr) {
-            // Analisa as propriedades do primeiro item da lista para pontuar a categoria
+            // Conta estatísticas
             string tipoRec = primeiroNo->conteudo->getTipo();
             string generoRec = primeiroNo->conteudo->getGenero();
-            
             contagemTiposRecomendados[tipoRec]++;
             contagemGenerosRecomendados[generoRec]++;
+
+            // --- SELEÇÃO POR ÍNDICE ---
+            cout << "\nDeseja assistir a um desses conteúdos? (Digite o NÚMERO correspondente ou 0 para voltar): ";
+            int escolha;
+            
+            // Proteção contra letras (loop infinito)
+            while (!(cin >> escolha)) {
+                cout << "❌ Erro: Digite um NÚMERO válido: ";
+                cin.clear();
+                cin.ignore(10000, '\n');
+            }
+            cin.ignore();
+            if (escolha > 0) {
+                NoSimples* atual = folhaAlcancada->listaFolha->getInicio();
+                int cont = 1;
+                
+                // Pula de nó em nó até chegar no número escolhido
+                while (atual != nullptr && cont < escolha) {
+                    atual = atual->proximo;
+                    cont++;
+                }
+                
+                // Se encontrou o nó, chama o método assistir passando o nome que está lá dentro
+                if (atual != nullptr) {
+                    assistirConteudo(atual->conteudo->getNome());
+                } else {
+                    cout << "❌ Número inválido! O catálogo não tem essa posição." << endl;
+                }
+            }
         }
-    }
-    
-    cout << "\nDeseja assistir a um desses conteúdos? (Digite o nome ou apenas 'nao'): ";
-    string titulo;
-    getline(cin, titulo);
-    
-    if (titulo != "nao") {
-        assistirConteudo(titulo);
     }
 }
  
@@ -239,7 +301,7 @@ void SistemaStreaming::exibirEstatisticas() const {
 
     // 4. Título Mais Assistido por Gênero
     cout << "🏷️ Título mais assistido por GÊNERO:" << endl;
-    vector<string> generosConhecidos = {"Acao", "Comedia", "Drama", "Terror", "Ficcao"};
+    vector<string> generosConhecidos = {"Acao", "Comedia", "Drama", "Terror", "Ficcao", "Suspense", "Natureza", "Tecnologia"};
     for (const string& g : generosConhecidos) {
         Conteudo* maisVisto = nullptr;
         for (Conteudo* c : catalogoGeral) {
