@@ -16,7 +16,7 @@ private:
 
     std::map<string, int> contagemTiposRecomendados;
     std::map<string, int> contagemGenerosRecomendados;
-    
+
 public:
     SistemaStreaming();
     ~SistemaStreaming();
@@ -28,6 +28,7 @@ public:
     void executarFluxoRecomendacao();
     void assistirConteudo(const string& titulo);
     void exibirEstatisticas() const;
+    void buscarPorNome() const;
     
     Conteudo* encontrarConteudo(const string& titulo) const;
     

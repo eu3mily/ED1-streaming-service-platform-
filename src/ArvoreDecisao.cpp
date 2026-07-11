@@ -10,31 +10,33 @@ ArvoreDecisao::~ArvoreDecisao() {
  
 void ArvoreDecisao::criarArvoreEstatica() {
     // nivel 1 = RAIZ
-    raiz = new NoArvore("Qual tipo de conteúdo você prefere?");
+    raiz = new NoArvore("Você prefere conteúdos com adrenalina/fantasia (Ação/Ficção/Anime)?");
     
     // nivel 2 (começar o afunilamento)
-    raiz->esquerda = new NoArvore("Você gosta de conteúdo de AÇÃO?");
-    raiz->direita = new NoArvore("Prefere conteúdo LEVE e DIVERTIDO?");
+    raiz->esquerda = new NoArvore("O seu foco principal é AÇÃO ou ANIMES?");
+    raiz->direita = new NoArvore("Você está procurando algo para rir (COMÉDIA)?");
     
     // nivel 3
-    raiz->esquerda->esquerda = new NoArvore("Prefere assistir FILMES ou SÉRIES de AÇÂO?");
-    raiz->esquerda->direita = new NoArvore("Gosta de FICÇÃO CIENTÍFICA?");
+    raiz->esquerda->esquerda = new NoArvore("Você prefere assistir no formato de FILME?");
+    raiz->esquerda->direita = new NoArvore("Gosta de histórias puramente de FICÇÃO CIENTÍFICA?");
     
-    raiz->direita->esquerda = new NoArvore("Você gosta de COMÉDIA?");
-    raiz->direita->direita = new NoArvore("Prefere conteúdo que faz REFLETIR?");
+    raiz->direita->esquerda = new NoArvore("Prefere comédias mais recentes (lançadas após 2010)?");
+    raiz->direita->direita = new NoArvore("Você prefere um bom DRAMA? (Se disser 'Não', focaremos em Documentários)");
     
-    // nivel 4
-    raiz->esquerda->esquerda->esquerda = new NoArvore("Gosta de ação MODERNA ou CLÁSSICA?");
-    raiz->esquerda->esquerda->direita = new NoArvore("Gosta de ANIMES de ação?");
+    // nivel 4 (Afunilamento final de ano para todos os ramos)
+    string perguntaAno = "Para fechar: prefere produções RECENTES (lançadas de 2015 em diante)?";
     
-    raiz->esquerda->direita->esquerda = new NoArvore("Prefere DISTÓPICO ou FUTURISTA?");
-    raiz->esquerda->direita->direita = new NoArvore("Gosta de SPACE OPERA?");
+    raiz->esquerda->esquerda->esquerda = new NoArvore(perguntaAno);
+    raiz->esquerda->esquerda->direita = new NoArvore(perguntaAno);
     
-    raiz->direita->esquerda->esquerda = new NoArvore("Prefere COMÉDIA ROMÂNTICA?");
-    raiz->direita->esquerda->direita = new NoArvore("Gosta de COMÉDIA DARK?");
+    raiz->esquerda->direita->esquerda = new NoArvore(perguntaAno);
+    raiz->esquerda->direita->direita = new NoArvore(perguntaAno);
     
-    raiz->direita->direita->esquerda = new NoArvore("Prefere DRAMA HISTÓRICO?");
-    raiz->direita->direita->direita = new NoArvore("Gosta de DOCUMENTÁRIOS?");
+    raiz->direita->esquerda->esquerda = new NoArvore(perguntaAno);
+    raiz->direita->esquerda->direita = new NoArvore(perguntaAno);
+    
+    raiz->direita->direita->esquerda = new NoArvore(perguntaAno);
+    raiz->direita->direita->direita = new NoArvore(perguntaAno);
     
     // niveis 5 E 6 = FOLHAS (fim da arvore = lista de recomendacoes)
     

@@ -1,6 +1,7 @@
 #include "SistemaStreaming.h"
 #include <iostream>
 #include <iomanip>
+#include <algorithm>
 using namespace std;
 
 
@@ -14,8 +15,23 @@ SistemaStreaming::SistemaStreaming()
     historicoAssistidos = new ListaHistorico();
     
     inserirConteudosIniciais();
-
     arvoreDecisao->popularArvore(catalogoGeral);
+
+    // Inicializa os tipos
+    contagemTiposRecomendados["Filme"] = 0;
+    contagemTiposRecomendados["Serie"] = 0;
+    contagemTiposRecomendados["Documentario"] = 0;
+    contagemTiposRecomendados["Anime"] = 0;
+
+    // Inicializa os gêneros
+    contagemGenerosRecomendados["Acao"] = 0;
+    contagemGenerosRecomendados["Comedia"] = 0;
+    contagemGenerosRecomendados["Drama"] = 0;
+    contagemGenerosRecomendados["Terror"] = 0;
+    contagemGenerosRecomendados["Ficcao"] = 0;
+    contagemGenerosRecomendados["Natureza"] = 0;
+    contagemGenerosRecomendados["Tecnologia"] = 0;
+    contagemGenerosRecomendados["Suspense"] = 0;
 }
  
 SistemaStreaming::~SistemaStreaming() {
@@ -31,7 +47,7 @@ SistemaStreaming::~SistemaStreaming() {
 void SistemaStreaming::menuPrincipal() {
     int opcao = 0;
     
-    while (opcao != 5) {
+    while (opcao != 6) {
         cout << "\n" << string(50, '=') << endl;
         cout << "  🎬 SISTEMA DE RECOMENDAÇÃO DE STREAMING  - TRABALHO FINAL ED1 SI!! 🎬" << endl;
         cout << string(50, '=') << endl;
@@ -39,7 +55,8 @@ void SistemaStreaming::menuPrincipal() {
         cout << "2. Receber recomendações (Iniciar uma árvore)" << endl;
         cout << "3. Ver histórico dos mais assistidos" << endl;
         cout << "4. Ver estatísticas do sistema" << endl;
-        cout << "5. Sair" << endl;
+        cout << "5. Buscar título por nome" << endl;
+        cout << "6. Sair" << endl;
         cout << string(50, '=') << endl;
         cout << "Escolha uma opção: ";
         
@@ -47,23 +64,15 @@ void SistemaStreaming::menuPrincipal() {
         cin.ignore();
         
         switch (opcao) {
-            case 1:
-                cadastrarConteudo();
+            case 1: cadastrarConteudo(); break;
+            case 2: executarFluxoRecomendacao(); break;
+            case 3: historicoAssistidos->imprimirTopAssistidos(); break;
+            case 4: exibirEstatisticas(); break;
+            case 5: buscarPorNome(); break;
+            case 6:
+                cout << "\nMuito obrigado por usar nosso sistema! Volte sempre :)\n" << endl; 
                 break;
-            case 2:
-                executarFluxoRecomendacao();
-                break;
-            case 3:
-                historicoAssistidos->imprimirTopAssistidos();
-                break;
-            case 4:
-                exibirEstatisticas();
-                break;
-            case 5:
-                cout << "\nMuito obrigado por usar nosso sistema! Volte sempre :)\n" << endl;
-                break;
-            default:
-                cout << "Opção inválida! Tente novamente." << endl;
+            default: cout << "Opção inválida! Tente novamente." << endl;
         }
     }
 }
@@ -281,4 +290,36 @@ void SistemaStreaming::inserirConteudosIniciais() {
     catalogoGeral.push_back(new Conteudo("Attack On Titan", "Anime", "Acao", 2018));
     catalogoGeral.push_back(new Conteudo("Death Note", "Anime", "Suspense", 2006));
 }
- 
+
+void SistemaStreaming::buscarPorNome() const {
+    cout << "\n=== 🔎 BUSCAR CONTEÚDO POR NOME ===" << endl;
+    cout << "Digite o nome ou parte do título que deseja encontrar: ";
+    string termo;
+    getline(cin, termo);
+
+    // Converte o termo de busca para minúsculo
+    string termoBusca = termo;
+    transform(termoBusca.begin(), termoBusca.end(), termoBusca.begin(), ::tolower);
+
+    bool encontrou = false;
+    cout << "\nResultados da busca:" << endl;
+    
+    // Percorre o catálogo geral
+    for (Conteudo* c : catalogoGeral) {
+        // Pega o nome do filme e também converte para minúsculo
+        string nomeConteudo = c->getNome();
+        string nomeLower = nomeConteudo;
+        transform(nomeLower.begin(), nomeLower.end(), nomeLower.begin(), ::tolower);
+
+        // Verifica se o termo de busca existe dentro do nome do filme
+        // A função find() retorna string::npos se NÃO encontrar nada
+        if (nomeLower.find(termoBusca) != string::npos) {
+            c->exibir();
+            encontrou = true;
+        }
+    }
+
+    if (!encontrou) {
+        cout << "Nenhum conteúdo encontrado com o termo '" << termo << "' :(" << endl;
+    }
+}
