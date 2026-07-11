@@ -49,8 +49,6 @@ void ListaHistorico::inserirOrdenado(Conteudo* c) {
 }
 
 void ListaHistorico::atualizarPosicao(Conteudo* c) {
-    if (inicio == nullptr) return;
-
     NoDuplo* atual = inicio;
     
     // Passo 1: Procura o nó que guarda este conteúdo na lista
