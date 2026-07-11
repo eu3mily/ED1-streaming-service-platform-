@@ -14,6 +14,8 @@ SistemaStreaming::SistemaStreaming()
     historicoAssistidos = new ListaHistorico();
     
     inserirConteudosIniciais();
+
+    arvoreDecisao->popularArvore(catalogoGeral);
 }
  
 SistemaStreaming::~SistemaStreaming() {

@@ -154,4 +154,80 @@ void ArvoreDecisao::deletarArvore(NoArvore* no) {
     
     delete no;
 }
- 
+
+void ArvoreDecisao::popularArvore(const vector<Conteudo*>& catalogo) {
+    if (raiz == nullptr) return;
+
+    // Percorre cada conteúdo do catálogo geral
+    for (Conteudo* c : catalogo) {
+        NoArvore* atual = raiz;
+
+        // Enquanto não chegar em um nó folha, o filme navega pela árvore
+        while (!atual->ehFolha()) {
+            
+            // LÓGICA DO NÍVEL 1: Tipo de conteúdo ou bifurcação inicial
+            if (atual == raiz) {
+                // Se for Ação, Ficção, Anime ou se for Filme/Série no geral, mandamos para a esquerda (ramo da ação/sci-fi)
+                if (c->getGenero() == "Acao" || c->getGenero() == "Ficcao" || c->getTipo() == "Anime") {
+                    atual = atual->esquerda;
+                } else {
+                    atual = atual->direita; // Comédia, Drama, Documentários vão para a direita
+                }
+            }
+            
+            // LÓGICA DO NÍVEL 2 (Ramo da Esquerda: Foco em Ação/Sci-Fi)
+            else if (atual == raiz->esquerda) {
+                if (c->getGenero() == "Acao" || c->getTipo() == "Anime") {
+                    atual = atual->esquerda; // Vai para perguntas de Ação/Anime
+                } else {
+                    atual = atual->direita;  // Vai para perguntas de Ficção Científica
+                }
+            }
+            
+            // LÓGICA DO NÍVEL 2 (Ramo da Direita: Conteúdos Leves / Reflexivos)
+            else if (atual == raiz->direita) {
+                if (c->getGenero() == "Comedia") {
+                    atual = atual->esquerda; // Vai para o ramo de Comédia
+                } else {
+                    atual = atual->direita;  // Vai para o ramo de Drama/Documentário (Refletir)
+                }
+            }
+            
+            // LÓGICA DO NÍVEL 3 (Sub-ramos de escolha: Filmes vs Séries, Estilos)
+            else if (atual == raiz->esquerda->esquerda) { // Filmes ou Séries de Ação?
+                if (c->getTipo() == "Filme") atual = atual->esquerda;
+                else atual = atual->direita;
+            }
+            else if (atual == raiz->esquerda->direita) { // Ficção Científica?
+                if (c->getGenero() == "Ficcao") atual = atual->esquerda;
+                else atual = std::move(atual->direita); // Outros/Space Opera
+            }
+            else if (atual == raiz->direita->esquerda) { // Comédia?
+                if (c->getAnoLancamento() > 2010) atual = atual->esquerda; // Romântica/Moderna
+                else atual = atual->direita; // Dark/Outros
+            }
+            else if (atual == raiz->direita->esquerda || atual == raiz->direita->direita) { // Drama ou Documentário?
+                if (c->getTipo() == "Documentario") atual = atual->direita;
+                else atual = atual->esquerda; // Drama
+            }
+            
+            // LÓGICA DO NÍVEL 4 (Último afunilamento antes das folhas: Clássico vs Moderno, etc)
+            else {
+                // Para simplificar o último nível e não estourar caminhos nulos,
+                // se o nó filho para onde vamos for nulo, paramos aqui, caso contrário avançamos.
+                if (c->getAnoLancamento() >= 2015) {
+                    if (atual->esquerda != nullptr) atual = atual->esquerda;
+                    else break;
+                } else {
+                    if (atual->direita != nullptr) atual = atual->direita;
+                    else break;
+                }
+            }
+        }
+
+        // Ao encontrar a folha correta, insere o ponteiro do filme de forma ordenada nela
+        if (atual != nullptr && atual->ehFolha() && atual->listaFolha != nullptr) {
+            atual->listaFolha->inserirOrdenado(c);
+        }
+    }
+}
