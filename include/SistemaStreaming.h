@@ -29,6 +29,8 @@ public:
     void assistirConteudo(const string& titulo);
     void exibirEstatisticas() const;
     void buscarPorNome() const;
+    void salvarDados() const;
+    bool carregarDados();
     
     Conteudo* encontrarConteudo(const string& titulo) const;
     

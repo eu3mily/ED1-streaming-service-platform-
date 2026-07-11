@@ -26,12 +26,15 @@ public:
     int getAnoLancamento() const;
     int getNumVisualizacoes() const;
     float getAvaliacaoMedia() const;
+    int getSomaAvaliacoes() const;
+    int getQtdAvaliacoes() const;
     
     // setters
     void setNome(string n);
     void setTipo(string t);
     void setGenero(string g);
     void setAnoLancamento(int ano);
+    void setAvaliacoes(int soma, int qtd);
     
     // metodos
     void incrementarVisualizacoes();

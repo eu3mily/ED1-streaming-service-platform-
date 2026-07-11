@@ -2,6 +2,8 @@
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
+#include <fstream>  // <-- PARA LER ARQUIVOS
+#include <sstream>  // <-- PARA SEPARAR OS TEXTOS
 using namespace std;
 
 
@@ -14,7 +16,10 @@ SistemaStreaming::SistemaStreaming()
     
     historicoAssistidos = new ListaHistorico();
     
-    inserirConteudosIniciais();
+    if (!carregarDados()) {
+        inserirConteudosIniciais();
+    }
+    
     arvoreDecisao->popularArvore(catalogoGeral);
 
     // Inicializa os tipos
@@ -70,6 +75,7 @@ void SistemaStreaming::menuPrincipal() {
             case 4: exibirEstatisticas(); break;
             case 5: buscarPorNome(); break;
             case 6:
+                salvarDados();
                 cout << "\nMuito obrigado por usar nosso sistema! Volte sempre :)\n" << endl; 
                 break;
             default: cout << "Opção inválida! Tente novamente." << endl;
@@ -412,4 +418,57 @@ void SistemaStreaming::buscarPorNome() const {
     if (!encontrou) {
         cout << "Nenhum conteúdo encontrado com o termo '" << termo << "' :(" << endl;
     }
+}
+
+void SistemaStreaming::salvarDados() const {
+    ofstream arquivo("banco_streaming.txt"); // Cria ou substitui o arquivo
+    
+    if (arquivo.is_open()) {
+        for (Conteudo* c : catalogoGeral) {
+            // Salva cada atributo separado por uma barra em pé (|)
+            arquivo << c->getNome() << "|"
+                    << c->getTipo() << "|"
+                    << c->getGenero() << "|"
+                    << c->getAnoLancamento() << "|"
+                    << c->getNumVisualizacoes() << "|"
+                    << c->getSomaAvaliacoes() << "|"
+                    << c->getQtdAvaliacoes() << "\n";
+        }
+        arquivo.close();
+        cout << "\n💾 Dados salvos com sucesso no arquivo 'banco_streaming.txt'!" << endl;
+    } else {
+        cout << "\n❌ Erro ao salvar os dados no arquivo!" << endl;
+    }
+}
+
+bool SistemaStreaming::carregarDados() {
+    ifstream arquivo("banco_streaming.txt"); // Tenta abrir o arquivo
+    
+    if (!arquivo.is_open()) {
+        return false; // Retorna falso se for a primeira vez rodando (arquivo não existe)
+    }
+
+    string linha;
+    while (getline(arquivo, linha)) {
+        stringstream ss(linha);
+        string nome, tipo, genero, anoStr, vizStr, somaStr, qtdStr;
+
+        // "Corta" a linha toda vez que acha um | e guarda nas variáveis
+        getline(ss, nome, '|');
+        getline(ss, tipo, '|');
+        getline(ss, genero, '|');
+        getline(ss, anoStr, '|');
+        getline(ss, vizStr, '|');
+        getline(ss, somaStr, '|');
+        getline(ss, qtdStr, '|');
+
+        if (!nome.empty()) {
+            // Recria o filme com os dados do arquivo
+            Conteudo* c = new Conteudo(nome, tipo, genero, stoi(anoStr), stoi(vizStr));
+            c->setAvaliacoes(stoi(somaStr), stoi(qtdStr));
+            catalogoGeral.push_back(c);
+        }
+    }
+    arquivo.close();
+    return true; // Sucesso na leitura
 }

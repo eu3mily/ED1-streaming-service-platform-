@@ -14,11 +14,17 @@ string Conteudo::getTipo() const { return tipo; }
 string Conteudo::getGenero() const { return genero; }
 int Conteudo::getAnoLancamento() const { return anoLancamento; }
 int Conteudo::getNumVisualizacoes() const { return numVisualizacoes; }
+int Conteudo::getSomaAvaliacoes() const { return somaAvaliacoes; }
+int Conteudo::getQtdAvaliacoes() const { return qtdAvaliacoes; }
 
 void Conteudo::setNome(string n) { nome = n; }
 void Conteudo::setTipo(string t) { tipo = t; }
 void Conteudo::setGenero(string g) { genero = g; }
 void Conteudo::setAnoLancamento(int ano) { anoLancamento = ano; }
+void Conteudo::setAvaliacoes(int soma, int qtd) {
+    somaAvaliacoes = soma;
+    qtdAvaliacoes = qtd;
+}
 
 void Conteudo::incrementarVisualizacoes() { 
     numVisualizacoes++; 
