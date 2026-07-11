@@ -230,7 +230,26 @@ void SistemaStreaming::assistirConteudo(const string& titulo) {
         conteudo->incrementarVisualizacoes();
         totalVisualizacoes++;
         historicoAssistidos->atualizarPosicao(conteudo);
+
         cout << "\nBOA!! " << titulo << " foi adicionado ao histórico!" << endl;
+
+        // --- LÓGICA DE AVALIAÇÃO POR ESTRELAS ---
+        int nota = 0;
+        while (true) {
+            cout << "Que nota (de 1 a 5 estrelas) dá para este conteúdo? ";
+            if (cin >> nota && nota >= 1 && nota <= 5) {
+                cin.ignore(); // Limpa o buffer
+                conteudo->avaliar(nota);
+                cout << "⭐ Avaliação de " << nota << " estrelas registada com sucesso!" << endl;
+                break; // Sai do loop após sucesso
+            } else {
+                cout << "❌ Erro: Por favor, digite um NÚMERO válido entre 1 e 5!" << endl;
+                cin.clear();
+                cin.ignore(10000, '\n');
+            }
+        }
+
+
     } else {
         cout << "Vixe, Conteúdo não encontrado!" << endl;
     }
@@ -272,6 +291,15 @@ void SistemaStreaming::exibirEstatisticas() const {
         if (par.second < minGen) { minGen = par.second; generoMenosRec = par.first; }
     }
     if (contagemGenerosRecomendados.empty()) minGen = 0;
+
+    if (totalRecomendacoes == 0) {
+        tipoMaisRec = "Nenhum";
+        generoMaisRec = "Nenhum";
+        tipoMenosRec = "Nenhum";
+        generoMenosRec = "Nenhum";
+        maxTipo = 0;
+        maxGen = 0;
+    }
 
     cout << "Tipo de conteúdo MAIS recomendado: " << tipoMaisRec << " (" << (maxTipo == -1 ? 0 : maxTipo) << "x)" << endl;
     cout << "Gênero MAIS recomendado:           " << generoMaisRec << " (" << (maxGen == -1 ? 0 : maxGen) << "x)" << endl;

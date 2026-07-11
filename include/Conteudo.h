@@ -7,10 +7,12 @@ using namespace std;
 class Conteudo {
 private:
     string nome;
-    string tipo;           // filme, serie, documentario e anime
-    string genero;         // acao, comedia, drama, terror e ficcao cientifica
+    string tipo;
+    string genero;
     int anoLancamento;
     int numVisualizacoes;
+    int somaAvaliacoes;
+    int qtdAvaliacoes;
 
 public:
     // construtores
@@ -23,6 +25,7 @@ public:
     string getGenero() const;
     int getAnoLancamento() const;
     int getNumVisualizacoes() const;
+    float getAvaliacaoMedia() const;
     
     // setters
     void setNome(string n);
@@ -32,6 +35,8 @@ public:
     
     // metodos
     void incrementarVisualizacoes();
+    void avaliar(int nota);
+    
     void exibir() const;
 };
 
