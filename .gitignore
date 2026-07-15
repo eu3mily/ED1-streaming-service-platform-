@@ -1,3 +1,9 @@
-.vscode/
-bin (executavel)/
+# Arquivos gerados pela compilação
+*.o
 *.exe
+src/build/
+build/
+.vscode/
+
+# Arquivo de persistência de dados local (não deve subir pro Git)
+banco_streaming.txt
