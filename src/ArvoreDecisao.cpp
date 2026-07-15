@@ -109,9 +109,20 @@ NoArvore* ArvoreDecisao::navegar() {
         cout << "\n" << atual->pergunta << endl;
         cout << "[1] Sim / [2] Não : ";
         
-        int opcao;
-        cin >> opcao; // tipo um switch case
-        cin.ignore();
+        int opcao = 0;
+        while (true) {
+            cin >> opcao;
+
+            // Se o usuário digitou uma letra/texto ou um número diferente de 1 e 2
+            if (cin.fail() || (opcao != 1 && opcao != 2)) {
+                cin.clear();            // Limpa o estado de erro do cin
+                cin.ignore(10000, '\n'); // Descarta o texto incorreto digitado
+                cout << "⚠️ Entrada inválida! Por favor, digite apenas [1] para Sim ou [2] para Não: ";
+            } else {
+                cin.ignore(10000, '\n'); // Limpa o buffer de quebras de linha pendentes
+                break;                   // Entrada válida! Sai do validador
+            }
+        }
         
         if (opcao == 1) { // se sim, vai pra esquerda
             if (atual->esquerda != nullptr) {
@@ -127,8 +138,6 @@ NoArvore* ArvoreDecisao::navegar() {
                 cout << "Caminho inválido!" << endl;
                 return nullptr;
             }
-        } else { // se nao for nenhum dos dois
-            cout << "Opção inválida! Digite apenas 1 ou 2." << endl;
         }
     }
     
