@@ -2,6 +2,8 @@
 #include <iostream>
 #include <iomanip> // Necessário para formatar as casas decimais da nota
 
+using namespace std;
+
 Conteudo::Conteudo() // vai ser inicializado no core como catalogo geral mesmo
     : nome(""), tipo(""), genero(""), anoLancamento(), numVisualizacoes() {}
 

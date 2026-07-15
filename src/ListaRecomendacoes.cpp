@@ -1,6 +1,8 @@
 #include "ListaRecomendacoes.h"
 #include <iostream>
 
+using namespace std;
+
 ListaRecomendacoes::ListaRecomendacoes() : inicio(nullptr), tamanho(0) {}
 
 ListaRecomendacoes::~ListaRecomendacoes() {

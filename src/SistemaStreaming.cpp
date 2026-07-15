@@ -158,7 +158,7 @@ void SistemaStreaming::listarConteudos() const {
         return;
     }
     
-    for (int i = 0; i < catalogoGeral.size(); i++) {
+    for (size_t i = 0; i < catalogoGeral.size(); i++) {
         cout << i + 1 << ". ";
         catalogoGeral[i]->exibir();
     }
