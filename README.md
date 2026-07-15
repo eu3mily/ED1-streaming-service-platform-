@@ -6,6 +6,21 @@ Um sistema inteligente de recomendação de conteúdo para uma plataforma de str
 
 ---
 
+## 🌟 Diferenciais e Funcionalidades Extras
+
+Para enriquecer a experiência do usuário e ir além dos requisitos obrigatórios da especificação, implementamos três grandes funcionalidades extras de nível profissional:
+
+1. **💾 Sistema de Persistência Real (Banco de Dados em TXT)**
+   O programa não "reseta" quando fecha! Todas as alterações no catálogo (novos cadastros), número de visualizações, histórico de assistidos e notas dadas são salvas automaticamente no arquivo `banco_streaming.txt` ao sair, e recarregadas perfeitamente ao iniciar o sistema.
+2. **⭐ Avaliação por Estrelas (Notas de 1 a 5)**
+   Ao assistir a um conteúdo recomendado, o usuário pode dar uma nota. O sistema calcula e exibe em tempo real a média geométrica das avaliações de cada filme/série com precisão decimal no catálogo geral.
+3. **🔎 Motor de Busca Inteligente (Busca Textual)**
+   Implementamos um sistema de busca case-insensitive (ignora maiúsculas/minúsculas) que varre o catálogo principal por aproximação de caracteres. Você pode buscar por `"homem"` e ele listará *"Homem de Ferro"*, *"Homem Aranha"*, etc.
+4. **🛡️ Blindagem Total do Terminal**
+   Todas as entradas de dados do teclado foram validadas. Se o usuário digitar letras no menu ou nas perguntas de sim/não da árvore, o buffer do `cin` é limpo automaticamente para evitar loops infinitos.
+
+---
+
 ## 🛠️ Especificação Técnica e Arquitetura
 
 O sistema foi desenvolvido inteiramente em **C++** e arquitetado de forma modular, dividindo as responsabilidades para aplicar conceitos avançados de estruturas de dados dinâmicas. O projeto está estruturado nos diretórios `include/` (arquivos de cabeçalho) e `src/` (implementações).
