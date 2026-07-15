@@ -17,3 +17,5 @@ run: all
 # 5. Regra de limpeza: apaga o .exe antigo para forçar uma compilação limpa
 clean:
 	del /Q $(EXEC)
+
+	// g++ -std=c++17 -I./include src/*.cpp -o bin/programa./bin/programa

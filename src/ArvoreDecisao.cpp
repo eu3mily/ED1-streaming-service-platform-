@@ -9,92 +9,163 @@ ArvoreDecisao::~ArvoreDecisao() {
 }
  
 void ArvoreDecisao::criarArvoreEstatica() {
-    // nivel 1 = RAIZ
+    // ============================================================
+    // NIVEL 1: RAIZ - Pergunta principal de divisão
+    // ============================================================
     raiz = new NoArvore("Você prefere conteúdos com adrenalina/fantasia (Ação/Ficção/Anime)?");
     
-    // nivel 2 (começar o afunilamento)
+    // ============================================================
+    // NIVEL 2: Afunilamento por subcategoria
+    // ============================================================
     raiz->esquerda = new NoArvore("O seu foco principal é AÇÃO ou ANIMES?");
-    raiz->direita = new NoArvore("Você está procurando algo para rir (COMÉDIA)?");
+    raiz->direita  = new NoArvore("Você está procurando algo para rir (COMÉDIA)?");
     
-    // nivel 3
+    // ============================================================
+    // NIVEL 3: Formato ou estilo
+    // ============================================================
     raiz->esquerda->esquerda = new NoArvore("Você prefere assistir no formato de FILME?");
-    raiz->esquerda->direita = new NoArvore("Gosta de histórias puramente de FICÇÃO CIENTÍFICA?");
+    raiz->esquerda->direita  = new NoArvore("Gosta de histórias puramente de FICÇÃO CIENTÍFICA?");
     
-    raiz->direita->esquerda = new NoArvore("Prefere comédias mais recentes (lançadas após 2010)?");
-    raiz->direita->direita = new NoArvore("Você prefere um bom DRAMA? (Se disser 'Não', focaremos em Documentários)");
+    raiz->direita->esquerda  = new NoArvore("Prefere comédias mais recentes (lançadas após 2010)?");
+    raiz->direita->direita   = new NoArvore("Você prefere um bom DRAMA? (Se 'Não', focaremos em Documentários)");
     
-    // nivel 4 (Afunilamento final de ano para todos os ramos)
-    string perguntaAno = "Para fechar: prefere produções RECENTES (lançadas de 2015 em diante)?";
+    // ============================================================
+    // NIVEL 4: Critério de época (recente vs clássico)
+    // ============================================================
+    string perguntaEpoca = "Para fechar: prefere produções RECENTES (lançadas de 2015 em diante)?";
     
-    raiz->esquerda->esquerda->esquerda = new NoArvore(perguntaAno);
-    raiz->esquerda->esquerda->direita = new NoArvore(perguntaAno);
-    
-    raiz->esquerda->direita->esquerda = new NoArvore(perguntaAno);
-    raiz->esquerda->direita->direita = new NoArvore(perguntaAno);
-    
-    raiz->direita->esquerda->esquerda = new NoArvore(perguntaAno);
-    raiz->direita->esquerda->direita = new NoArvore(perguntaAno);
-    
-    raiz->direita->direita->esquerda = new NoArvore(perguntaAno);
-    raiz->direita->direita->direita = new NoArvore(perguntaAno);
-    
-    // niveis 5 E 6 = FOLHAS (fim da arvore = lista de recomendacoes)
-    
-    // Filmes de Ação Moderna
-    raiz->esquerda->esquerda->esquerda->esquerda = new NoArvore("Folha");
-    raiz->esquerda->esquerda->esquerda->esquerda->listaFolha = new ListaRecomendacoes(); // cospe uma lista de acordo c afolha
-    
-    raiz->esquerda->esquerda->esquerda->direita = new NoArvore("Folha");
-    raiz->esquerda->esquerda->esquerda->direita->listaFolha = new ListaRecomendacoes();
-    
+    raiz->esquerda->esquerda->esquerda = new NoArvore(perguntaEpoca);
+    raiz->esquerda->esquerda->direita  = new NoArvore(perguntaEpoca);
+    raiz->esquerda->direita->esquerda  = new NoArvore(perguntaEpoca);
+    raiz->esquerda->direita->direita   = new NoArvore(perguntaEpoca);
+    raiz->direita->esquerda->esquerda  = new NoArvore(perguntaEpoca);
+    raiz->direita->esquerda->direita   = new NoArvore(perguntaEpoca);
+    raiz->direita->direita->esquerda   = new NoArvore(perguntaEpoca);
+    raiz->direita->direita->direita    = new NoArvore(perguntaEpoca);
+
+    // ============================================================
+    // NIVEL 5: Critério de popularidade
+    // ============================================================
+    string perguntaPop = "Prefere títulos MUITO POPULARES (blockbusters/hits conhecidos)?";
+
+    // Filmes de Ação
+    raiz->esquerda->esquerda->esquerda->esquerda = new NoArvore(perguntaPop);
+    raiz->esquerda->esquerda->esquerda->direita  = new NoArvore(perguntaPop);
     // Animes de Ação
-    raiz->esquerda->esquerda->direita->esquerda = new NoArvore("Folha");
-    raiz->esquerda->esquerda->direita->esquerda->listaFolha = new ListaRecomendacoes();
-    
-    raiz->esquerda->esquerda->direita->direita = new NoArvore("Folha");
-    raiz->esquerda->esquerda->direita->direita->listaFolha = new ListaRecomendacoes();
-    
+    raiz->esquerda->esquerda->direita->esquerda  = new NoArvore(perguntaPop);
+    raiz->esquerda->esquerda->direita->direita   = new NoArvore(perguntaPop);
     // Ficção Científica
-    raiz->esquerda->direita->esquerda->esquerda = new NoArvore("Folha");
-    raiz->esquerda->direita->esquerda->esquerda->listaFolha = new ListaRecomendacoes();
-    
-    raiz->esquerda->direita->esquerda->direita = new NoArvore("Folha");
-    raiz->esquerda->direita->esquerda->direita->listaFolha = new ListaRecomendacoes();
-    
-    // Space Opera
-    raiz->esquerda->direita->direita->esquerda = new NoArvore("Folha");
-    raiz->esquerda->direita->direita->esquerda->listaFolha = new ListaRecomendacoes();
-    
-    raiz->esquerda->direita->direita->direita = new NoArvore("Folha");
-    raiz->esquerda->direita->direita->direita->listaFolha = new ListaRecomendacoes();
-    
-    // Comédia Romântica
-    raiz->direita->esquerda->esquerda->esquerda = new NoArvore("Folha");
-    raiz->direita->esquerda->esquerda->esquerda->listaFolha = new ListaRecomendacoes();
-    
-    raiz->direita->esquerda->esquerda->direita = new NoArvore("Folha");
-    raiz->direita->esquerda->esquerda->direita->listaFolha = new ListaRecomendacoes();
-    
-    // Comédia Dark
-    raiz->direita->esquerda->direita->esquerda = new NoArvore("Folha");
-    raiz->direita->esquerda->direita->esquerda->listaFolha = new ListaRecomendacoes();
-    
-    raiz->direita->esquerda->direita->direita = new NoArvore("Folha");
-    raiz->direita->esquerda->direita->direita->listaFolha = new ListaRecomendacoes();
-    
-    // Drama Histórico
-    raiz->direita->direita->esquerda->esquerda = new NoArvore("Folha");
-    raiz->direita->direita->esquerda->esquerda->listaFolha = new ListaRecomendacoes();
-    
-    raiz->direita->direita->esquerda->direita = new NoArvore("Folha");
-    raiz->direita->direita->esquerda->direita->listaFolha = new ListaRecomendacoes();
-    
-    // Documentários
-    raiz->direita->direita->direita->esquerda = new NoArvore("Folha");
-    raiz->direita->direita->direita->esquerda->listaFolha = new ListaRecomendacoes();
-    
-    raiz->direita->direita->direita->direita = new NoArvore("Folha");
-    raiz->direita->direita->direita->direita->listaFolha = new ListaRecomendacoes();
+    raiz->esquerda->direita->esquerda->esquerda  = new NoArvore(perguntaPop);
+    raiz->esquerda->direita->esquerda->direita   = new NoArvore(perguntaPop);
+    // Space Opera / Outros Sci-Fi
+    raiz->esquerda->direita->direita->esquerda   = new NoArvore(perguntaPop);
+    raiz->esquerda->direita->direita->direita    = new NoArvore(perguntaPop);
+    // Comédia Recente
+    raiz->direita->esquerda->esquerda->esquerda  = new NoArvore(perguntaPop);
+    raiz->direita->esquerda->esquerda->direita   = new NoArvore(perguntaPop);
+    // Comédia Clássica
+    raiz->direita->esquerda->direita->esquerda   = new NoArvore(perguntaPop);
+    raiz->direita->esquerda->direita->direita    = new NoArvore(perguntaPop);
+    // Drama
+    raiz->direita->direita->esquerda->esquerda   = new NoArvore(perguntaPop);
+    raiz->direita->direita->esquerda->direita    = new NoArvore(perguntaPop);
+    // Documentário
+    raiz->direita->direita->direita->esquerda    = new NoArvore(perguntaPop);
+    raiz->direita->direita->direita->direita     = new NoArvore(perguntaPop);
+
+    // ============================================================
+    // NIVEL 6: FOLHAS (Lista de recomendações final)
+    // Cada folha tem sua própria ListaRecomendacoes que será populada
+    // automaticamente pelo método popularArvore() com base no catálogo.
+    // ============================================================
+
+    // --- RAMO: Filmes de Ação ---
+    // Recentes + Populares
+    raiz->esquerda->esquerda->esquerda->esquerda->esquerda = new NoArvore("Folha");
+    raiz->esquerda->esquerda->esquerda->esquerda->esquerda->listaFolha = new ListaRecomendacoes();
+    // Recentes + Alternativos
+    raiz->esquerda->esquerda->esquerda->esquerda->direita = new NoArvore("Folha");
+    raiz->esquerda->esquerda->esquerda->esquerda->direita->listaFolha = new ListaRecomendacoes();
+    // Clássicos + Populares
+    raiz->esquerda->esquerda->esquerda->direita->esquerda = new NoArvore("Folha");
+    raiz->esquerda->esquerda->esquerda->direita->esquerda->listaFolha = new ListaRecomendacoes();
+    // Clássicos + Alternativos
+    raiz->esquerda->esquerda->esquerda->direita->direita = new NoArvore("Folha");
+    raiz->esquerda->esquerda->esquerda->direita->direita->listaFolha = new ListaRecomendacoes();
+
+    // --- RAMO: Animes de Ação ---
+    // Recentes + Populares
+    raiz->esquerda->esquerda->direita->esquerda->esquerda = new NoArvore("Folha");
+    raiz->esquerda->esquerda->direita->esquerda->esquerda->listaFolha = new ListaRecomendacoes();
+    // Recentes + Alternativos
+    raiz->esquerda->esquerda->direita->esquerda->direita = new NoArvore("Folha");
+    raiz->esquerda->esquerda->direita->esquerda->direita->listaFolha = new ListaRecomendacoes();
+    // Clássicos + Populares
+    raiz->esquerda->esquerda->direita->direita->esquerda = new NoArvore("Folha");
+    raiz->esquerda->esquerda->direita->direita->esquerda->listaFolha = new ListaRecomendacoes();
+    // Clássicos + Alternativos
+    raiz->esquerda->esquerda->direita->direita->direita = new NoArvore("Folha");
+    raiz->esquerda->esquerda->direita->direita->direita->listaFolha = new ListaRecomendacoes();
+
+    // --- RAMO: Ficção Científica ---
+    raiz->esquerda->direita->esquerda->esquerda->esquerda = new NoArvore("Folha");
+    raiz->esquerda->direita->esquerda->esquerda->esquerda->listaFolha = new ListaRecomendacoes();
+    raiz->esquerda->direita->esquerda->esquerda->direita = new NoArvore("Folha");
+    raiz->esquerda->direita->esquerda->esquerda->direita->listaFolha = new ListaRecomendacoes();
+    raiz->esquerda->direita->esquerda->direita->esquerda = new NoArvore("Folha");
+    raiz->esquerda->direita->esquerda->direita->esquerda->listaFolha = new ListaRecomendacoes();
+    raiz->esquerda->direita->esquerda->direita->direita = new NoArvore("Folha");
+    raiz->esquerda->direita->esquerda->direita->direita->listaFolha = new ListaRecomendacoes();
+
+    // --- RAMO: Space Opera / Sci-Fi Outros ---
+    raiz->esquerda->direita->direita->esquerda->esquerda = new NoArvore("Folha");
+    raiz->esquerda->direita->direita->esquerda->esquerda->listaFolha = new ListaRecomendacoes();
+    raiz->esquerda->direita->direita->esquerda->direita = new NoArvore("Folha");
+    raiz->esquerda->direita->direita->esquerda->direita->listaFolha = new ListaRecomendacoes();
+    raiz->esquerda->direita->direita->direita->esquerda = new NoArvore("Folha");
+    raiz->esquerda->direita->direita->direita->esquerda->listaFolha = new ListaRecomendacoes();
+    raiz->esquerda->direita->direita->direita->direita = new NoArvore("Folha");
+    raiz->esquerda->direita->direita->direita->direita->listaFolha = new ListaRecomendacoes();
+
+    // --- RAMO: Comédia Recente ---
+    raiz->direita->esquerda->esquerda->esquerda->esquerda = new NoArvore("Folha");
+    raiz->direita->esquerda->esquerda->esquerda->esquerda->listaFolha = new ListaRecomendacoes();
+    raiz->direita->esquerda->esquerda->esquerda->direita = new NoArvore("Folha");
+    raiz->direita->esquerda->esquerda->esquerda->direita->listaFolha = new ListaRecomendacoes();
+    raiz->direita->esquerda->esquerda->direita->esquerda = new NoArvore("Folha");
+    raiz->direita->esquerda->esquerda->direita->esquerda->listaFolha = new ListaRecomendacoes();
+    raiz->direita->esquerda->esquerda->direita->direita = new NoArvore("Folha");
+    raiz->direita->esquerda->esquerda->direita->direita->listaFolha = new ListaRecomendacoes();
+
+    // --- RAMO: Comédia Clássica ---
+    raiz->direita->esquerda->direita->esquerda->esquerda = new NoArvore("Folha");
+    raiz->direita->esquerda->direita->esquerda->esquerda->listaFolha = new ListaRecomendacoes();
+    raiz->direita->esquerda->direita->esquerda->direita = new NoArvore("Folha");
+    raiz->direita->esquerda->direita->esquerda->direita->listaFolha = new ListaRecomendacoes();
+    raiz->direita->esquerda->direita->direita->esquerda = new NoArvore("Folha");
+    raiz->direita->esquerda->direita->direita->esquerda->listaFolha = new ListaRecomendacoes();
+    raiz->direita->esquerda->direita->direita->direita = new NoArvore("Folha");
+    raiz->direita->esquerda->direita->direita->direita->listaFolha = new ListaRecomendacoes();
+
+    // --- RAMO: Drama ---
+    raiz->direita->direita->esquerda->esquerda->esquerda = new NoArvore("Folha");
+    raiz->direita->direita->esquerda->esquerda->esquerda->listaFolha = new ListaRecomendacoes();
+    raiz->direita->direita->esquerda->esquerda->direita = new NoArvore("Folha");
+    raiz->direita->direita->esquerda->esquerda->direita->listaFolha = new ListaRecomendacoes();
+    raiz->direita->direita->esquerda->direita->esquerda = new NoArvore("Folha");
+    raiz->direita->direita->esquerda->direita->esquerda->listaFolha = new ListaRecomendacoes();
+    raiz->direita->direita->esquerda->direita->direita = new NoArvore("Folha");
+    raiz->direita->direita->esquerda->direita->direita->listaFolha = new ListaRecomendacoes();
+
+    // --- RAMO: Documentário ---
+    raiz->direita->direita->direita->esquerda->esquerda = new NoArvore("Folha");
+    raiz->direita->direita->direita->esquerda->esquerda->listaFolha = new ListaRecomendacoes();
+    raiz->direita->direita->direita->esquerda->direita = new NoArvore("Folha");
+    raiz->direita->direita->direita->esquerda->direita->listaFolha = new ListaRecomendacoes();
+    raiz->direita->direita->direita->direita->esquerda = new NoArvore("Folha");
+    raiz->direita->direita->direita->direita->esquerda->listaFolha = new ListaRecomendacoes();
+    raiz->direita->direita->direita->direita->direita = new NoArvore("Folha");
+    raiz->direita->direita->direita->direita->direita->listaFolha = new ListaRecomendacoes();
 }
  
 NoArvore* ArvoreDecisao::navegar() {
@@ -113,35 +184,34 @@ NoArvore* ArvoreDecisao::navegar() {
         while (true) {
             cin >> opcao;
 
-            // Se o usuário digitou uma letra/texto ou um número diferente de 1 e 2
             if (cin.fail() || (opcao != 1 && opcao != 2)) {
-                cin.clear();            // Limpa o estado de erro do cin
-                cin.ignore(10000, '\n'); // Descarta o texto incorreto digitado
+                cin.clear();
+                cin.ignore(10000, '\n');
                 cout << "⚠️ Entrada inválida! Por favor, digite apenas [1] para Sim ou [2] para Não: ";
             } else {
-                cin.ignore(10000, '\n'); // Limpa o buffer de quebras de linha pendentes
-                break;                   // Entrada válida! Sai do validador
+                cin.ignore(10000, '\n');
+                break;
             }
         }
         
-        if (opcao == 1) { // se sim, vai pra esquerda
+        if (opcao == 1) {
             if (atual->esquerda != nullptr) {
                 atual = atual->esquerda;
-            } else { // se nao tiver ramo para esquerda
+            } else {
                 cout << "Caminho inválido!" << endl;
                 return nullptr;
             }
-        } else if (opcao == 2) { // se nao, vai pra direita
+        } else {
             if (atual->direita != nullptr) {
                 atual = atual->direita;
-            } else { // se nao tiver ramo pra direita
+            } else {
                 cout << "Caminho inválido!" << endl;
                 return nullptr;
             }
         }
     }
     
-    cout << "=== RECOMENDAÇÕES PERSONALIZADAS PARA VOCÊ === " << endl;
+    cout << "\n=== RECOMENDAÇÕES PERSONALIZADAS PARA VOCÊ ===" << endl;
     if (atual->listaFolha != nullptr) {
         atual->listaFolha->imprimirLista();
     } else {
@@ -154,81 +224,84 @@ NoArvore* ArvoreDecisao::navegar() {
 NoArvore* ArvoreDecisao::getRaiz() const {
     return raiz;
 }
- //se o ponteiro for nulo, volta nulo, sendo o ponteiro da raiz, se nao, é pra seguir o fluxo normal ate chegar na folha (recomendacoes)
+
 void ArvoreDecisao::deletarArvore(NoArvore* no) {
     if (no == nullptr) return;
-    
     deletarArvore(no->esquerda);
     deletarArvore(no->direita);
-    
     if (no->listaFolha != nullptr) {
         delete no->listaFolha;
     }
-    
     delete no;
 }
 
 void ArvoreDecisao::popularArvore(const vector<Conteudo*>& catalogo) {
     if (raiz == nullptr) return;
 
-    // Percorre cada conteúdo do catálogo geral
     for (Conteudo* c : catalogo) {
         NoArvore* atual = raiz;
 
-        // Enquanto não chegar em um nó folha, o filme navega pela árvore
         while (!atual->ehFolha()) {
             
-            // LÓGICA DO NÍVEL 1: Tipo de conteúdo ou bifurcação inicial
+            // NIVEL 1: Ação/Ficção/Anime (esq) vs Comédia/Drama/Doc (dir)
             if (atual == raiz) {
-                // Se for Ação, Ficção, Anime ou se for Filme/Série no geral, mandamos para a esquerda (ramo da ação/sci-fi)
                 if (c->getGenero() == "Acao" || c->getGenero() == "Ficcao" || c->getTipo() == "Anime") {
                     atual = atual->esquerda;
                 } else {
-                    atual = atual->direita; // Comédia, Drama, Documentários vão para a direita
+                    atual = atual->direita;
                 }
             }
             
-            // LÓGICA DO NÍVEL 2 (Ramo da Esquerda: Foco em Ação/Sci-Fi)
+            // NIVEL 2 (Esq): Ação/Anime (esq) vs Ficção (dir)
             else if (atual == raiz->esquerda) {
                 if (c->getGenero() == "Acao" || c->getTipo() == "Anime") {
-                    atual = atual->esquerda; // Vai para perguntas de Ação/Anime
+                    atual = atual->esquerda;
                 } else {
-                    atual = atual->direita;  // Vai para perguntas de Ficção Científica
+                    atual = atual->direita;
                 }
             }
             
-            // LÓGICA DO NÍVEL 2 (Ramo da Direita: Conteúdos Leves / Reflexivos)
+            // NIVEL 2 (Dir): Comédia (esq) vs Drama/Doc (dir)
             else if (atual == raiz->direita) {
                 if (c->getGenero() == "Comedia") {
-                    atual = atual->esquerda; // Vai para o ramo de Comédia
+                    atual = atual->esquerda;
                 } else {
-                    atual = atual->direita;  // Vai para o ramo de Drama/Documentário (Refletir)
+                    atual = atual->direita;
                 }
             }
             
-            // LÓGICA DO NÍVEL 3 (Sub-ramos de escolha: Filmes vs Séries, Estilos)
-            else if (atual == raiz->esquerda->esquerda) { // Filmes ou Séries de Ação?
+            // NIVEL 3: Filme de Ação (esq) vs Anime de Ação (dir)
+            else if (atual == raiz->esquerda->esquerda) {
                 if (c->getTipo() == "Filme") atual = atual->esquerda;
                 else atual = atual->direita;
             }
-            else if (atual == raiz->esquerda->direita) { // Ficção Científica?
+            // NIVEL 3: Ficção pura (esq) vs Space Opera (dir)
+            else if (atual == raiz->esquerda->direita) {
                 if (c->getGenero() == "Ficcao") atual = atual->esquerda;
-                else atual = std::move(atual->direita); // Outros/Space Opera
+                else atual = atual->direita;
             }
-            else if (atual == raiz->direita->esquerda) { // Comédia?
-                if (c->getAnoLancamento() > 2010) atual = atual->esquerda; // Romântica/Moderna
-                else atual = atual->direita; // Dark/Outros
+            // NIVEL 3: Comédia recente (esq) vs Comédia clássica (dir)
+            else if (atual == raiz->direita->esquerda) {
+                if (c->getAnoLancamento() > 2010) atual = atual->esquerda;
+                else atual = atual->direita;
             }
-            else if (atual == raiz->direita->direita) { // Drama ou Documentário?
+            // NIVEL 3: Drama (esq) vs Documentário (dir)
+            else if (atual == raiz->direita->direita) {
                 if (c->getTipo() == "Documentario") atual = atual->direita;
-                else atual = atual->esquerda; // Drama
+                else atual = atual->esquerda;
             }
             
-            // LÓGICA DO NÍVEL 4 (Último afunilamento antes das folhas: Clássico vs Moderno, etc)
+            // NIVEL 4: Recente (esq) vs Clássico (dir) — para todos os ramos
+            else if (!atual->esquerda->ehFolha() && !atual->direita->ehFolha()) {
+                if (c->getAnoLancamento() >= 2015) atual = atual->esquerda;
+                else atual = atual->direita;
+            }
+
+            // NIVEL 5: Popular (esq) vs Alternativo (dir)
+            // Considera "popular" filmes com mais de 5 visualizações OU com avaliação >= 4.0
             else {
-                // Para simplificar o último nível e não estourar caminhos nulos,
-                // se o nó filho para onde vamos for nulo, paramos aqui, caso contrário avançamos.
-                if (c->getAnoLancamento() >= 2015) {
+                bool popular = (c->getNumVisualizacoes() >= 5 || c->getAvaliacaoMedia() >= 4.0f);
+                if (popular) {
                     if (atual->esquerda != nullptr) atual = atual->esquerda;
                     else break;
                 } else {
@@ -238,7 +311,6 @@ void ArvoreDecisao::popularArvore(const vector<Conteudo*>& catalogo) {
             }
         }
 
-        // Ao encontrar a folha correta, insere o ponteiro do filme de forma ordenada nela
         if (atual != nullptr && atual->ehFolha() && atual->listaFolha != nullptr) {
             atual->listaFolha->inserirOrdenado(c);
         }

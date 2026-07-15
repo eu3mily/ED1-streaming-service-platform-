@@ -27,8 +27,7 @@ private:
     int totalRecomendacoes;               // Contador global de recomendações feitas
     int totalVisualizacoes;               // Contador global de filmes assistidos
 
-    // Estrutura std::map (Tabela Hash/Dicionário) ideal para contar ocorrências.
-    // Associa uma chave de texto (Ex: "Acao") a um valor numérico (Ex: 5 vezes).
+    // Estrutura std::map ideal para contar ocorrências por chave de texto.
     std::map<std::string, int> contagemTiposRecomendados;
     std::map<std::string, int> contagemGenerosRecomendados;
 
@@ -42,12 +41,13 @@ public:
     // ==========================================
     //         MÉTODOS DO MENU PRINCIPAL
     // ==========================================
-    void menuPrincipal();                 // Loop principal que mantém o programa rodando (Interface)
+    void menuPrincipal();                 // Loop principal que mantém o programa rodando
     void cadastrarConteudo();             // Opção 1: Insere novo filme no catálogo e atualiza a árvore
-    void executarFluxoRecomendacao();     // Opção 2: Inicia a navegação de perguntas na árvore
-    void exibirEstatisticas() const;      // Opção 4: Calcula pódios e imprime o relatório do sistema
-    void buscarPorNome() const;           // Opção 5: Busca textual percorrendo o vetor do catálogo geral
-    void listarConteudos() const;         // Opção 6: Exibe todos os títulos cadastrados
+    void removerConteudo();               // Opção 2: Remove um título do catálogo e reconstrói a árvore
+    void executarFluxoRecomendacao();     // Opção 3: Inicia a navegação de perguntas na árvore
+    void exibirEstatisticas() const;      // Opção 5: Calcula pódios e imprime o relatório do sistema
+    void buscarPorNome() const;           // Opção 6: Busca textual percorrendo o vetor do catálogo geral
+    void listarConteudos() const;         // Opção 7: Exibe todos os títulos cadastrados
     
     // ==========================================
     //         MÉTODOS DE AÇÃO DO USUÁRIO
@@ -64,7 +64,6 @@ public:
     // ==========================================
     //              MÉTODOS AUXILIARES
     // ==========================================
-    // Busca um ponteiro de Conteudo específico pelo nome exato
     Conteudo* encontrarConteudo(const std::string& titulo) const;
     
 private:

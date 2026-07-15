@@ -2,8 +2,8 @@
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
-#include <fstream>  // <-- PARA LER ARQUIVOS
-#include <sstream>  // <-- PARA SEPARAR OS TEXTOS
+#include <fstream>  // PARA LER ARQUIVOS
+#include <sstream>  // PARA SEPARAR OS TEXTOS
 using namespace std;
 
 
@@ -22,13 +22,13 @@ SistemaStreaming::SistemaStreaming()
     
     arvoreDecisao->popularArvore(catalogoGeral);
 
-    // Inicializa os tipos
+    // inicializa os tipos
     contagemTiposRecomendados["Filme"] = 0;
     contagemTiposRecomendados["Serie"] = 0;
     contagemTiposRecomendados["Documentario"] = 0;
     contagemTiposRecomendados["Anime"] = 0;
 
-    // Inicializa os gêneros
+    // inicializa os gêneros
     contagemGenerosRecomendados["Acao"] = 0;
     contagemGenerosRecomendados["Comedia"] = 0;
     contagemGenerosRecomendados["Drama"] = 0;
@@ -52,45 +52,47 @@ SistemaStreaming::~SistemaStreaming() {
 void SistemaStreaming::menuPrincipal() {
     int opcao = 0;
     
-    while (opcao != 7) {
+    while (opcao != 8) {
         cout << "\n" << string(50, '=') << endl;
         cout << "  🎬 SISTEMA DE RECOMENDAÇÃO DE STREAMING  - TRABALHO FINAL ED1 SI!! 🎬" << endl;
         cout << string(50, '=') << endl;
         cout << "1. Cadastrar novo conteúdo" << endl;
-        cout << "2. Receber recomendações (Iniciar uma árvore)" << endl;
-        cout << "3. Ver histórico dos mais assistidos" << endl;
-        cout << "4. Ver estatísticas do sistema" << endl;
-        cout << "5. Buscar título por nome" << endl;
-        cout << "6. Listar todo o catálogo" << endl;
-        cout << "7. Sair" << endl;
+        cout << "2. Remover conteúdo do catálogo" << endl;   // ← NOVO
+        cout << "3. Receber recomendações (Iniciar uma árvore)" << endl;
+        cout << "4. Ver histórico dos mais assistidos" << endl;
+        cout << "5. Ver estatísticas do sistema" << endl;
+        cout << "6. Buscar título por nome" << endl;
+        cout << "7. Listar todo o catálogo" << endl;
+        cout << "8. Sair" << endl;
         cout << string(50, '=') << endl;
         cout << "Escolha uma opção: ";
         
         cin >> opcao;
         
-        // --- PROTEÇÃO CONTRA ENTRADAS INVÁLIDAS NO MENU (LETRAS/SÍMBOLOS) ---
+        // PROTEÇÃO CONTRA ENTRADAS INVÁLIDAS NO MENU (LETRAS/SÍMBOLOS)
         if (cin.fail()) {
-            cin.clear();             // Limpa o estado de erro do cin
-            cin.ignore(10000, '\n'); // Descarta todo o texto incorreto digitado
-            cout << "\n❌ Opção inválida! Por favor, digite apenas números de 1 a 7." << endl;
-            opcao = 0;               // Reseta a variável para continuar no loop
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "\n Opção inválida! Por favor, digite apenas números de 1 a 8." << endl;
+            opcao = 0;
             continue;
         }
         
-        cin.ignore(10000, '\n');     // Descarta restos no buffer (como o Enter)
+        cin.ignore(10000, '\n');
         
         switch (opcao) {
             case 1: cadastrarConteudo(); break;
-            case 2: executarFluxoRecomendacao(); break;
-            case 3: historicoAssistidos->imprimirTopAssistidos(); break;
-            case 4: exibirEstatisticas(); break;
-            case 5: buscarPorNome(); break;
-            case 6: listarConteudos(); break;
-            case 7: 
+            case 2: removerConteudo(); break;          // ← NOVO
+            case 3: executarFluxoRecomendacao(); break;
+            case 4: historicoAssistidos->imprimirTopAssistidos(); break;
+            case 5: exibirEstatisticas(); break;
+            case 6: buscarPorNome(); break;
+            case 7: listarConteudos(); break;
+            case 8: 
                 salvarDados(); 
                 cout << "\nMuito obrigado por usar nosso sistema! Volte sempre :)\n" << endl; 
                 break;
-            default: cout << "❌ Opção inválida! Tente novamente com um número de 1 a 7." << endl;
+            default: cout << "\n Opção inválida! Tente novamente com um número de 1 a 8." << endl;
         }
     }
 }
@@ -109,21 +111,21 @@ void SistemaStreaming::cadastrarConteudo() {
         cout << "\n--- Selecione o Tipo ---" << endl;
         cout << "[1] Filme | [2] Serie | [3] Documentario | [4] Anime" << endl;
         cout << "Opção: ";
-        if (!(cin >> opTipo)) { // Se o usuário digitar letra, isso dá falso
+        if (!(cin >> opTipo)) {
             cin.clear(); 
             cin.ignore(10000, '\n'); 
         } else {
-            cin.ignore(10000, '\n'); // Limpa o buffer após leitura correta
+            cin.ignore(10000, '\n');
         }
         
         if (opTipo == 1) tipo = "Filme";
         else if (opTipo == 2) tipo = "Serie";
         else if (opTipo == 3) tipo = "Documentario";
         else if (opTipo == 4) tipo = "Anime";
-        else cout << "❌ Opção inválida! Digite um número de 1 a 4." << endl;
+        else cout << "\n❌ Opção inválida! Digite um número de 1 a 4." << endl;
     }
     
-    // --- SELEÇÃO DE GÊNERO POR ÍNDICE ---
+    // SELEÇÃO DE GÊNERO POR ÍNDICE
     int opGenero = 0;
     while (opGenero < 1 || opGenero > 8) {
         cout << "\n--- Selecione o Gênero ---" << endl;
@@ -134,7 +136,7 @@ void SistemaStreaming::cadastrarConteudo() {
             cin.clear(); 
             cin.ignore(10000, '\n'); 
         } else {
-            cin.ignore(10000, '\n'); // Limpa o buffer após leitura correta
+            cin.ignore(10000, '\n');
         }
         
         if (opGenero == 1) genero = "Acao";
@@ -145,26 +147,82 @@ void SistemaStreaming::cadastrarConteudo() {
         else if (opGenero == 6) genero = "Suspense";
         else if (opGenero == 7) genero = "Natureza";
         else if (opGenero == 8) genero = "Tecnologia";
-        else cout << "❌ Opção inválida! Digite um número de 1 a 8." << endl;
+        else cout << "\n❌ Opção inválida! Digite um número de 1 a 8." << endl;
     }
     
-    // --- CORREÇÃO DO LOOP INFINITO NO ANO ---
+    // ANO COM PROTEÇÃO
     while (true) {
         cout << "\nAno de lançamento: ";
         if (cin >> ano) {
-            cin.ignore(10000, '\n'); // Limpa o buffer e sai do loop com segurança
+            cin.ignore(10000, '\n');
             break; 
         } else {
             cout << "❌ Erro: Por favor, digite um NÚMERO inteiro válido." << endl;
-            cin.clear(); // Limpa a falha do cin
-            cin.ignore(10000, '\n'); // Descarta o texto digitado errado
+            cin.clear();
+            cin.ignore(10000, '\n');
         }
     }
     
     Conteudo* novoConteudo = new Conteudo(nome, tipo, genero, ano);
     catalogoGeral.push_back(novoConteudo);
     
+    // também insere na árvore imediatamente
+    arvoreDecisao->popularArvore({novoConteudo});
+    
     cout << "\nOBAA! Conteúdo cadastrado com sucesso!" << endl;
+}
+
+
+void SistemaStreaming::removerConteudo() {
+    if (catalogoGeral.empty()) {
+        cout << "\n❌ O catálogo está vazio! Nada para remover." << endl;
+        return;
+    }
+
+    // Exibe o catálogo numerado para o usuário escolher
+    cout << "\n=== REMOVER CONTEÚDO DO CATÁLOGO ===" << endl;
+    for (size_t i = 0; i < catalogoGeral.size(); i++) {
+        cout << i + 1 << ". ";
+        catalogoGeral[i]->exibir();
+    }
+    
+    int numero = 0;
+    cout << "\nDigite o NÚMERO do conteúdo a remover (0 para cancelar): ";
+    
+    // Proteção contra letras
+    while (!(cin >> numero)) {
+        cout << "❌ Erro: Digite um NÚMERO válido: ";
+        cin.clear();
+        cin.ignore(10000, '\n');
+    }
+    cin.ignore(10000, '\n');
+    
+    if (numero == 0) {
+        cout << "Remoção cancelada." << endl;
+        return;
+    }
+    
+    if (numero < 1 || numero > (int)catalogoGeral.size()) {
+        cout << "❌ Número inválido! Não existe esse item no catálogo." << endl;
+        return;
+    }
+    
+    // Guarda o nome antes de deletar para confirmar ao usuário
+    string nomeRemovido = catalogoGeral[numero - 1]->getNome();
+    
+    // Libera a memória e remove do vetor
+    delete catalogoGeral[numero - 1];
+    catalogoGeral.erase(catalogoGeral.begin() + numero - 1);
+    
+    cout << "\n✅ \"" << nomeRemovido << "\" foi removido do catálogo com sucesso!" << endl;
+    
+    // Recria a árvore com o catálogo atualizado
+    delete arvoreDecisao;
+    arvoreDecisao = new ArvoreDecisao();
+    arvoreDecisao->criarArvoreEstatica();
+    arvoreDecisao->popularArvore(catalogoGeral);
+    
+    cout << "🔄 Árvore de recomendações atualizada!" << endl;
 }
  
 void SistemaStreaming::listarConteudos() const {
@@ -179,31 +237,25 @@ void SistemaStreaming::listarConteudos() const {
         catalogoGeral[i]->exibir();
     }
 }
-
  
 void SistemaStreaming::executarFluxoRecomendacao() {
-    cout << "\n AGORA VAMOS ENCONTRAR O CONTEÚDO PERFEITO PARA VOCÊ!\n";
+    cout << "\nAGORA VAMOS ENCONTRAR O CONTEÚDO PERFEITO PARA VOCÊ!\n";
     cout << "Responda as perguntas abaixo:\n" << endl;
     
-    // Captura qual nó folha o usuário atingiu
     NoArvore* folhaAlcancada = arvoreDecisao->navegar();
     totalRecomendacoes++;
     
-    // Registra a recomendação para as estatísticas globais
     if (folhaAlcancada != nullptr && folhaAlcancada->listaFolha != nullptr) {
         NoSimples* primeiroNo = folhaAlcancada->listaFolha->getInicio();
         if (primeiroNo != nullptr) {
-            // Conta estatísticas
             string tipoRec = primeiroNo->conteudo->getTipo();
             string generoRec = primeiroNo->conteudo->getGenero();
             contagemTiposRecomendados[tipoRec]++;
             contagemGenerosRecomendados[generoRec]++;
 
-            // --- SELEÇÃO POR ÍNDICE ---
             cout << "\nDeseja assistir a um desses conteúdos? (Digite o NÚMERO correspondente ou 0 para voltar): ";
             int escolha;
             
-            // Proteção contra letras (loop infinito)
             while (!(cin >> escolha)) {
                 cout << "❌ Erro: Digite um NÚMERO válido: ";
                 cin.clear();
@@ -214,13 +266,11 @@ void SistemaStreaming::executarFluxoRecomendacao() {
                 NoSimples* atual = folhaAlcancada->listaFolha->getInicio();
                 int cont = 1;
                 
-                // Pula de nó em nó até chegar no número escolhido
                 while (atual != nullptr && cont < escolha) {
                     atual = atual->proximo;
                     cont++;
                 }
                 
-                // Se encontrou o nó, chama o método assistir passando o nome que está lá dentro
                 if (atual != nullptr) {
                     assistirConteudo(atual->conteudo->getNome());
                 } else {
@@ -241,23 +291,20 @@ void SistemaStreaming::assistirConteudo(const string& titulo) {
 
         cout << "\nBOA!! " << titulo << " foi adicionado ao histórico!" << endl;
 
-        // --- LÓGICA DE AVALIAÇÃO POR ESTRELAS ---
         int nota = 0;
         while (true) {
             cout << "Que nota (de 1 a 5 estrelas) dá para este conteúdo? ";
             if (cin >> nota && nota >= 1 && nota <= 5) {
-                cin.ignore(); // Limpa o buffer
+                cin.ignore();
                 conteudo->avaliar(nota);
                 cout << "⭐ Avaliação de " << nota << " estrelas registada com sucesso!" << endl;
-                break; // Sai do loop após sucesso
+                break;
             } else {
                 cout << "❌ Erro: Por favor, digite um NÚMERO válido entre 1 e 5!" << endl;
                 cin.clear();
                 cin.ignore(10000, '\n');
             }
         }
-
-
     } else {
         cout << "Vixe, Conteúdo não encontrado!" << endl;
     }
@@ -282,7 +329,6 @@ void SistemaStreaming::exibirEstatisticas() const {
     cout << "Total de títulos no catálogo: " << catalogoGeral.size() << endl;
     cout << string(60, '-') << endl;
 
-    // 1. Calcular Tipo Mais e Menos Recomendado
     string tipoMaisRec = "Nenhum", tipoMenosRec = "Nenhum";
     int maxTipo = -1, minTipo = 1e9;
     for (auto const& par : contagemTiposRecomendados) {
@@ -291,7 +337,6 @@ void SistemaStreaming::exibirEstatisticas() const {
     }
     if (contagemTiposRecomendados.empty()) minTipo = 0;
 
-    // 2. Calcular Gênero Mais e Menos Recomendado
     string generoMaisRec = "Nenhum", generoMenosRec = "Nenhum";
     int maxGen = -1, minGen = 1e9;
     for (auto const& par : contagemGenerosRecomendados) {
@@ -301,12 +346,9 @@ void SistemaStreaming::exibirEstatisticas() const {
     if (contagemGenerosRecomendados.empty()) minGen = 0;
 
     if (totalRecomendacoes == 0) {
-        tipoMaisRec = "Nenhum";
-        generoMaisRec = "Nenhum";
-        tipoMenosRec = "Nenhum";
-        generoMenosRec = "Nenhum";
-        maxTipo = 0;
-        maxGen = 0;
+        tipoMaisRec = "Nenhum"; generoMaisRec = "Nenhum";
+        tipoMenosRec = "Nenhum"; generoMenosRec = "Nenhum";
+        maxTipo = 0; maxGen = 0;
     }
 
     cout << "Tipo de conteúdo MAIS recomendado: " << tipoMaisRec << " (" << (maxTipo == -1 ? 0 : maxTipo) << "x)" << endl;
@@ -315,7 +357,6 @@ void SistemaStreaming::exibirEstatisticas() const {
     cout << "Gênero MENOS recomendado:           " << (minGen == 1e9 || minGen == 0 ? "Nenhum" : generoMenosRec) << endl;
     cout << string(60, '-') << endl;
 
-    // 3. Título Mais Assistido por Tipo
     cout << "🎬 Título mais assistido por TIPO:" << endl;
     vector<string> tiposConhecidos = {"Filme", "Serie", "Documentario", "Anime"};
     for (const string& t : tiposConhecidos) {
@@ -335,7 +376,6 @@ void SistemaStreaming::exibirEstatisticas() const {
     }
     cout << string(60, '-') << endl;
 
-    // 4. Título Mais Assistido por Gênero
     cout << "🏷️ Título mais assistido por GÊNERO:" << endl;
     vector<string> generosConhecidos = {"Acao", "Comedia", "Drama", "Terror", "Ficcao", "Suspense", "Natureza", "Tecnologia"};
     for (const string& g : generosConhecidos) {
@@ -355,7 +395,6 @@ void SistemaStreaming::exibirEstatisticas() const {
     }
     cout << string(60, '-') << endl;
 
-    // 5. Títulos Nunca Selecionados
     cout << "💤 Títulos NUNCA selecionados (0 visualizações):" << endl;
     bool nenhumNulo = true;
     for (Conteudo* c : catalogoGeral) {
@@ -395,22 +434,16 @@ void SistemaStreaming::buscarPorNome() const {
     string termo;
     getline(cin, termo);
 
-    // Converte o termo de busca para minúsculo
     string termoBusca = termo;
     transform(termoBusca.begin(), termoBusca.end(), termoBusca.begin(), ::tolower);
 
     bool encontrou = false;
     cout << "\nResultados da busca:" << endl;
     
-    // Percorre o catálogo geral
     for (Conteudo* c : catalogoGeral) {
-        // Pega o nome do filme e também converte para minúsculo
-        string nomeConteudo = c->getNome();
-        string nomeLower = nomeConteudo;
+        string nomeLower = c->getNome();
         transform(nomeLower.begin(), nomeLower.end(), nomeLower.begin(), ::tolower);
 
-        // Verifica se o termo de busca existe dentro do nome do filme
-        // A função find() retorna string::npos se NÃO encontrar nada
         if (nomeLower.find(termoBusca) != string::npos) {
             c->exibir();
             encontrou = true;
@@ -423,11 +456,10 @@ void SistemaStreaming::buscarPorNome() const {
 }
 
 void SistemaStreaming::salvarDados() const {
-    ofstream arquivo("banco_streaming.txt"); // Cria ou substitui o arquivo
+    ofstream arquivo("banco_streaming.txt");
     
     if (arquivo.is_open()) {
         for (Conteudo* c : catalogoGeral) {
-            // Salva cada atributo separado por uma barra em pé (|)
             arquivo << c->getNome() << "|"
                     << c->getTipo() << "|"
                     << c->getGenero() << "|"
@@ -444,10 +476,10 @@ void SistemaStreaming::salvarDados() const {
 }
 
 bool SistemaStreaming::carregarDados() {
-    ifstream arquivo("banco_streaming.txt"); // Tenta abrir o arquivo
+    ifstream arquivo("banco_streaming.txt");
     
     if (!arquivo.is_open()) {
-        return false; // Retorna falso se for a primeira vez rodando (arquivo não existe)
+        return false;
     }
 
     string linha;
@@ -455,7 +487,6 @@ bool SistemaStreaming::carregarDados() {
         stringstream ss(linha);
         string nome, tipo, genero, anoStr, vizStr, somaStr, qtdStr;
 
-        // "Corta" a linha toda vez que acha um | e guarda nas variáveis
         getline(ss, nome, '|');
         getline(ss, tipo, '|');
         getline(ss, genero, '|');
@@ -465,17 +496,15 @@ bool SistemaStreaming::carregarDados() {
         getline(ss, qtdStr, '|');
 
         if (!nome.empty()) {
-            // Recria o filme com os dados do arquivo
             Conteudo* c = new Conteudo(nome, tipo, genero, stoi(anoStr), stoi(vizStr));
             c->setAvaliacoes(stoi(somaStr), stoi(qtdStr));
             catalogoGeral.push_back(c);
 
-            // Adiciona ao histórico se já tiver sido assistido
             if (c->getNumVisualizacoes() > 0) {
                 historicoAssistidos->inserirOrdenado(c);
             }
         }
     }
     arquivo.close();
-    return true; // Sucesso na leitura
+    return true;
 }
