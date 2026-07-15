@@ -24,7 +24,6 @@ public:
     void menuPrincipal();
     void cadastrarConteudo();
     void listarConteudos() const;
-    void removerConteudo();
     void executarFluxoRecomendacao();
     void assistirConteudo(const string& titulo);
     void exibirEstatisticas() const;

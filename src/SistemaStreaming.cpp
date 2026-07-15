@@ -52,7 +52,7 @@ SistemaStreaming::~SistemaStreaming() {
 void SistemaStreaming::menuPrincipal() {
     int opcao = 0;
     
-    while (opcao != 6) {
+    while (opcao != 7) {
         cout << "\n" << string(50, '=') << endl;
         cout << "  🎬 SISTEMA DE RECOMENDAÇÃO DE STREAMING  - TRABALHO FINAL ED1 SI!! 🎬" << endl;
         cout << string(50, '=') << endl;
@@ -61,7 +61,8 @@ void SistemaStreaming::menuPrincipal() {
         cout << "3. Ver histórico dos mais assistidos" << endl;
         cout << "4. Ver estatísticas do sistema" << endl;
         cout << "5. Buscar título por nome" << endl;
-        cout << "6. Sair" << endl;
+        cout << "6. Listar todo o catálogo" << endl;
+        cout << "7. Sair" << endl;
         cout << string(50, '=') << endl;
         cout << "Escolha uma opção: ";
         
@@ -74,8 +75,9 @@ void SistemaStreaming::menuPrincipal() {
             case 3: historicoAssistidos->imprimirTopAssistidos(); break;
             case 4: exibirEstatisticas(); break;
             case 5: buscarPorNome(); break;
-            case 6:
-                salvarDados();
+            case 6: listarConteudos(); break;
+            case 7: 
+                salvarDados(); 
                 cout << "\nMuito obrigado por usar nosso sistema! Volte sempre :)\n" << endl; 
                 break;
             default: cout << "Opção inválida! Tente novamente." << endl;
@@ -161,23 +163,7 @@ void SistemaStreaming::listarConteudos() const {
         catalogoGeral[i]->exibir();
     }
 }
- 
-void SistemaStreaming::removerConteudo() {
-    listarConteudos();
-    
-    cout << "\nDigite o número do conteúdo a remover (0 para cancelar): ";
-    int numero;
-    cin >> numero;
-    cin.ignore();
-    
-    if (numero > 0 && numero <= catalogoGeral.size()) {
-        delete catalogoGeral[numero - 1];
-        catalogoGeral.erase(catalogoGeral.begin() + numero - 1);
-        cout << "Conteúdo removido!" << endl;
-    } else if (numero != 0) {
-        cout << "Número inválido!" << endl;
-    }
-}
+
  
 void SistemaStreaming::executarFluxoRecomendacao() {
     cout << "\n AGORA VAMOS ENCONTRAR O CONTEÚDO PERFEITO PARA VOCÊ!\n";
@@ -467,6 +453,11 @@ bool SistemaStreaming::carregarDados() {
             Conteudo* c = new Conteudo(nome, tipo, genero, stoi(anoStr), stoi(vizStr));
             c->setAvaliacoes(stoi(somaStr), stoi(qtdStr));
             catalogoGeral.push_back(c);
+
+            // Adiciona ao histórico se já tiver sido assistido
+            if (c->getNumVisualizacoes() > 0) {
+                historicoAssistidos->inserirOrdenado(c);
+            }
         }
     }
     arquivo.close();
