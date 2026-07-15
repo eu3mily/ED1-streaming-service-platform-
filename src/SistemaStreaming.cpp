@@ -67,7 +67,17 @@ void SistemaStreaming::menuPrincipal() {
         cout << "Escolha uma opção: ";
         
         cin >> opcao;
-        cin.ignore();
+        
+        // --- PROTEÇÃO CONTRA ENTRADAS INVÁLIDAS NO MENU (LETRAS/SÍMBOLOS) ---
+        if (cin.fail()) {
+            cin.clear();             // Limpa o estado de erro do cin
+            cin.ignore(10000, '\n'); // Descarta todo o texto incorreto digitado
+            cout << "\n❌ Opção inválida! Por favor, digite apenas números de 1 a 7." << endl;
+            opcao = 0;               // Reseta a variável para continuar no loop
+            continue;
+        }
+        
+        cin.ignore(10000, '\n');     // Descarta restos no buffer (como o Enter)
         
         switch (opcao) {
             case 1: cadastrarConteudo(); break;
@@ -80,7 +90,7 @@ void SistemaStreaming::menuPrincipal() {
                 salvarDados(); 
                 cout << "\nMuito obrigado por usar nosso sistema! Volte sempre :)\n" << endl; 
                 break;
-            default: cout << "Opção inválida! Tente novamente." << endl;
+            default: cout << "❌ Opção inválida! Tente novamente com um número de 1 a 7." << endl;
         }
     }
 }
@@ -102,7 +112,10 @@ void SistemaStreaming::cadastrarConteudo() {
         if (!(cin >> opTipo)) { // Se o usuário digitar letra, isso dá falso
             cin.clear(); 
             cin.ignore(10000, '\n'); 
+        } else {
+            cin.ignore(10000, '\n'); // Limpa o buffer após leitura correta
         }
+        
         if (opTipo == 1) tipo = "Filme";
         else if (opTipo == 2) tipo = "Serie";
         else if (opTipo == 3) tipo = "Documentario";
@@ -120,7 +133,10 @@ void SistemaStreaming::cadastrarConteudo() {
         if (!(cin >> opGenero)) {
             cin.clear(); 
             cin.ignore(10000, '\n'); 
+        } else {
+            cin.ignore(10000, '\n'); // Limpa o buffer após leitura correta
         }
+        
         if (opGenero == 1) genero = "Acao";
         else if (opGenero == 2) genero = "Comedia";
         else if (opGenero == 3) genero = "Drama";
@@ -136,7 +152,7 @@ void SistemaStreaming::cadastrarConteudo() {
     while (true) {
         cout << "\nAno de lançamento: ";
         if (cin >> ano) {
-            cin.ignore(); // Limpa o buffer do Enter e sai do loop
+            cin.ignore(10000, '\n'); // Limpa o buffer e sai do loop com segurança
             break; 
         } else {
             cout << "❌ Erro: Por favor, digite um NÚMERO inteiro válido." << endl;
