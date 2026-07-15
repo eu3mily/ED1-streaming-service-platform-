@@ -210,7 +210,7 @@ void ArvoreDecisao::popularArvore(const vector<Conteudo*>& catalogo) {
                 if (c->getAnoLancamento() > 2010) atual = atual->esquerda; // Romântica/Moderna
                 else atual = atual->direita; // Dark/Outros
             }
-            else if (atual == raiz->direita->esquerda || atual == raiz->direita->direita) { // Drama ou Documentário?
+            else if (atual == raiz->direita->direita) { // Drama ou Documentário?
                 if (c->getTipo() == "Documentario") atual = atual->direita;
                 else atual = atual->esquerda; // Drama
             }
